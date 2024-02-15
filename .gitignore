@@ -1,0 +1,25 @@
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+/personal-library-manager/node_modules
+/books_library_app_mock_server/node_modules
+
+/personal-library-manager/.pnp
+.pnp.js
+
+# testing
+/personal-library-manager/coverage
+
+# production
+/personal-library-manager/build
+
+# misc
+.DS_Store
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
