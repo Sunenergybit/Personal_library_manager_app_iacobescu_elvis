@@ -8,7 +8,43 @@ app.use(express.json());
 // This will store our books in memory,
 // "id" is the unique identifier,
 // other fields are up to you
-let books = [];
+let books = [{
+  id: 1708010782691,
+  date: 1708010782691,
+  genre:['Fiction', 'Action'],
+  name: 'Example Book',
+  bookmark: 5,
+  read: false,
+  author: 'Iacobescu Elvis'
+},
+{
+  id: 1708010782692,
+  date: 1708010782692,
+  genre:['Fiction'],
+  name: 'Example Book',
+  bookmark: 5,
+  read: false,
+  author: 'Iacobescu Elvis'
+},
+{
+  id: 1708010782693,
+  date: 1708010782693,
+  genre: ['Fiction'],
+  name: 'Example Book',
+  bookmark: 5,
+  read: true,
+  author: 'Iacobescu Elvis'
+},
+{
+  id: 1708010782694,
+  date: 1708010782694,
+  genre: ['Fiction'],
+  name: 'Example Book,Example Book, Example Book',
+  bookmark: 5,
+  read: false,
+  author: 'Iacobescu Elvis'
+}
+];
 
 // Get all books
 app.get("/books", (req, res) => {
@@ -17,7 +53,7 @@ app.get("/books", (req, res) => {
 
 // Add a new book
 app.post("/books", (req, res) => {
-  const book = { id: Date.now(), ...req.body };
+  const book = { id: Date.now(), date: Date.now(), ...req.body };
   books.push(book);
   res.status(201).json(book);
 });
