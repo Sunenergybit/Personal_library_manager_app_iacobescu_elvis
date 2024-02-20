@@ -14,11 +14,3 @@ header {
    width: 100% !important;
    }
   }
-.Header-text-gradient{
-  background: #3F1B13;
-  background: linear-gradient(to top right, #3F1B13 0%, #75402E 50%, #E5BA95 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  font-weight: bold;
-  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-}

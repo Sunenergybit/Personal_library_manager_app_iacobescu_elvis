@@ -2,20 +2,23 @@ import { useState } from 'react';
 import useSWR, { mutate } from 'swr';
 import './App.css';
 import BookList from './components/Booklist';
-import {Library,Book} from './models/book';
+import { Library, Book } from './models/book';
 import axios from 'axios';
 import { Drawer, Box, IconButton, Snackbar, Alert  } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import BookForm from './components/BookForm';
 import AppHeader from './components/AppHeader';
+import { apiLocation} from './utils/common';
+import ConfirmDeleteDialog from './components/ConfirmDeleteDialog';
 
 const fetcher = (url: string) => axios.get(url).then(res => res.data);
 
-// error hadling this is not the onli place where error might apear add a generic error handler 
-// we need some validation for the form.
 function App() {
-  const { data: books, error } = useSWR<Library>('http://localhost:3001/books', fetcher);
+  const { data: books, error } = useSWR<Library>(`${apiLocation}/books`, fetcher);
   const [snackbarError, setSnackbarError] = useState<string | null>(null);
+  const [openDeleteConfirm, setOpenDeleteConfirm] = useState(false);
+  const [bookToDelete, setBookToDelete] = useState<number | null>(null);
+  
   const [selectedBook, setSelectedBook] = useState<Book>({
     id: null,
     date: null,
@@ -47,12 +50,30 @@ function App() {
     });
     toggleDrawer();
   }
+
+  const handleDeleteClick = (bookId: number | null) => {
+    if(bookId){
+      setOpenDeleteConfirm(true);
+      setBookToDelete(bookId);
+    }
+  };
+  
+  const handleConfirmDelete = () => {
+    if (bookToDelete) {
+      deleteBook(bookToDelete);
+    }
+    setOpenDeleteConfirm(false);
+  };
+  
+  const handleCloseDeleteConfirm = () => {
+    setOpenDeleteConfirm(false);
+  };
   
   const deleteBook = (bookId: number | null) => {
     if (bookId) {
-      axios.delete(`http://localhost:3001/books/${bookId}`)
+      axios.delete(`${apiLocation}/books/${bookId}`)
         .then(() => {
-          mutate('http://localhost:3001/books');
+          mutate(`${apiLocation}/books`);
           setSnackbarError(null);
           toggleDrawer();
         })
@@ -65,10 +86,12 @@ function App() {
   
   
   const handleFormSubmit = (updatedBook: Book) => {
+    console.log(updatedBook.id);
+    
     if (updatedBook.id) {
-      axios.put(`http://localhost:3001/books/${updatedBook.id}`, updatedBook)
+      axios.put(`${apiLocation}/books/${updatedBook.id}`, updatedBook)
         .then(() => {
-          mutate('http://localhost:3001/books');
+          mutate(`${apiLocation}/books`);
           setSnackbarError(null);
           toggleDrawer();
         })
@@ -76,9 +99,9 @@ function App() {
           setSnackbarError("Failed to update the book. Please try again.");
         });
     } else {
-      axios.post('http://localhost:3001/books', updatedBook)
+      axios.post(`${apiLocation}/books`, updatedBook)
         .then(response => {
-          mutate('http://localhost:3001/books');
+          mutate(`${apiLocation}/books`);
           setSnackbarError(null);
           toggleDrawer();
         })
@@ -115,7 +138,7 @@ function App() {
               <CloseIcon />
             </IconButton>
           </Box>
-          <BookForm initialValues={selectedBook} onSubmit={handleFormSubmit} deleteBook={deleteBook} />
+          <BookForm initialValues={selectedBook} onSubmit={handleFormSubmit} deleteBook={handleDeleteClick} />
         </Box>
       </Drawer>
        {
@@ -126,6 +149,12 @@ function App() {
           {snackbarError}
         </Alert>
       </Snackbar>
+     
+      <ConfirmDeleteDialog
+        open={openDeleteConfirm}
+        onClose={handleCloseDeleteConfirm}
+        onConfirm={handleConfirmDelete}
+      />
     </div>
   );
 }

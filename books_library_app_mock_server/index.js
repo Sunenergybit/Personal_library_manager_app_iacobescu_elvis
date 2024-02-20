@@ -53,7 +53,8 @@ app.get("/books", (req, res) => {
 
 // Add a new book
 app.post("/books", (req, res) => {
-  const book = { id: Date.now(), date: Date.now(), ...req.body };
+  const book = {...req.body, id: Date.now(), date: Date.now()};
+  console.log(book);
   books.push(book);
   res.status(201).json(book);
 });

@@ -1,0 +1,2 @@
+export const genreOptions = ["Drama", "Fiction", "Action", "Adventure", "Mystery", "Horror", "Thriller", "Historical", "Romance", "Graphical Novel", "Short Story", "Children's", "Memoir", "Food & Drink", "Art", "Humor", "Essays", "Religion", "Social Sciences", "Parenting & Families", "Science & Technology"];
+export const apiLocation = 'http://localhost:3001'; 
