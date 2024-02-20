@@ -86,8 +86,6 @@ function App() {
   
   
   const handleFormSubmit = (updatedBook: Book) => {
-    console.log(updatedBook.id);
-    
     if (updatedBook.id) {
       axios.put(`${apiLocation}/books/${updatedBook.id}`, updatedBook)
         .then(() => {
